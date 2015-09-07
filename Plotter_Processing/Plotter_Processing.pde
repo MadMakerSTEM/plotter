@@ -1,8 +1,16 @@
-  
-/* This sketch takes data from the accelerometer on the arduino Esplora and plots it on a graph
- 
- Author - Owen Brasier
- */
+/* Plotter - Processing
+
+Description: Plots the output of the accelerometer on a graph on the
+computer. Pressing the keys 'x', 'y' or 'z' will tell the program to
+plot that particular axis.
+
+Author: Owen Brasier 
+Date: July 2015
+http://challenge.madmaker.com.au 
+
+To work with the "Plotter_Esplora.ino"
+
+*/
  
 import processing.serial.*; // import the Serial library
  
@@ -25,11 +33,11 @@ float[] xAxis = new float[numPoints];
  
 void setup() {
   println(Serial.list());   // print the serial ports available
-  if(Serial.list().length < 1) {
+  if(Serial.list().length == 0) {
     println("No serial port attached, please plug in your Esplora!");
     exit();
   }
-  //String comPort = Serial.list()[0];    // should work on linux/mac
+  //String comPort = Serial.list()[0];    // should work on mac/linux
   String comPort = Serial.list()[1];    // should work on windows
   port = new Serial(this, comPort, 9600);   // 0 is the first port, you may have to change
   size(800, 600);           // new window
