@@ -26,7 +26,7 @@ float[] xAxis = new float[numPoints];
 void setup() {
   println(Serial.list());   // print the serial ports available
   if(Serial.list().length < 1) {
-    println("No serial port attached, please plug in your Esplora!")
+    println("No serial port attached, please plug in your Esplora!");
     exit();
   }
   //String comPort = Serial.list()[0];    // should work on linux/mac
