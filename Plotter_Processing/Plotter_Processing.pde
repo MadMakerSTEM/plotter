@@ -19,9 +19,7 @@ Serial port;
  
  
 int numPoints = 1000;        // number of points on the graph
-int stepSize = 10;          // time difference between steps in ms
 int currentPoint = 0;
-int prevTime = 0;
  
 int box = 20;
 int offset = 50;            // offset of x-axis, in pixels
@@ -49,6 +47,7 @@ void draw() {
   while (port.available() > 0) {
     serial = port.readStringUntil('\n');
   }
+  
   if (serial != null) {               // if string is not empty
     String[] a = split(serial, ',');  // split up line with delimiter to be ','
     for(int i = 0; i < accel.length; i++) {
@@ -66,22 +65,15 @@ void drawPlot() {
   background(255);
   drawBorders();
   if (currentPoint < numPoints) {
-    if (millis() - prevTime >= stepSize) {  // check if it is time to plot again
-      float x = map(currentPoint, 0, numPoints, offset, width-box);
-      float y = map(accel[mode], -512, 512, height, 0);      
-      data[currentPoint] = y;
-      xAxis[currentPoint] = x;
-      if (currentPoint == 0) {        // make the first line just a point
-        px =  x;
-        py = y;
-      }
-      text("value: " + accel[mode], width-box-70, box+20);
-      for(int i = 1; i < currentPoint; i++) {
-        line(xAxis[i-1], data[i-1], xAxis[i], data[i]);
-      }
-      currentPoint++;
-      prevTime = millis();
+    float x = map(currentPoint, 0, numPoints, offset, width-box);
+    float y = map(accel[mode], -512, 512, height, 0);      
+    data[currentPoint] = y;
+    xAxis[currentPoint] = x;
+    text("value: " + accel[mode], width-box-70, box+20);
+    for(int i = 1; i < currentPoint; i++) {
+      line(xAxis[i-1], data[i-1], xAxis[i], data[i]);
     }
+    currentPoint++;
   } 
   else {
     reset();

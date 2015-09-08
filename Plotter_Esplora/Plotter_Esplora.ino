@@ -24,6 +24,7 @@ void loop() {
   Serial.print(',');
   Serial.print(yAxis);
   Serial.print(',');
-  Serial.println(zAxis);     
+  Serial.print(zAxis);
+  Serial.println(',');
   delay(5);
 }
