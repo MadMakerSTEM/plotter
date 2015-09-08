@@ -37,8 +37,8 @@ void setup() {
     println("No serial port attached, please plug in your Esplora!");
     exit();
   }
-  //String comPort = Serial.list()[0];    // should work on mac/linux
-  String comPort = Serial.list()[1];    // should work on windows
+  String comPort = Serial.list()[0];    // should work on mac/linux
+  //String comPort = Serial.list()[1];    // should work on windows
   port = new Serial(this, comPort, 9600);   // 0 is the first port, you may have to change
   size(800, 600);           // new window
   frame.setTitle("Accelerometer plot");
@@ -51,8 +51,9 @@ void draw() {
   }
   if (serial != null) {               // if string is not empty
     String[] a = split(serial, ',');  // split up line with delimiter to be ','
-    for(int i = 0; i < a.length; i++) // put all the items in a to be in accel array
+    for(int i = 0; i < accel.length; i++) {
       accel[i] = int(a[i]);           // cast to integer, add to array at position i
+    }
     drawPlot();
   }
   else {
@@ -78,10 +79,6 @@ void drawPlot() {
       for(int i = 1; i < currentPoint; i++) {
         line(xAxis[i-1], data[i-1], xAxis[i], data[i]);
       }
-        
-      //line(px, py, x, y);             // draw a line from the previous value to current value
-      px = x;
-      py = y;
       currentPoint++;
       prevTime = millis();
     }
@@ -113,9 +110,7 @@ void drawBorders() {
  
 // Reset the plot
 void reset() {
-  background(255);
   currentPoint = 0;
-  drawBorders();
 }
  
 // check if the key is pressed, and change the mode if a new mode is selected
