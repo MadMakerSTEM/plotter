@@ -47,16 +47,21 @@ void draw() {
   while (port.available() > 0) {
     serial = port.readStringUntil('\n');
   }
-  
   if (serial != null) {               // if string is not empty
     String[] a = split(serial, ',');  // split up line with delimiter to be ','
-    for(int i = 0; i < accel.length; i++) {
-      accel[i] = int(a[i]);           // cast to integer, add to array at position i
+    if(a.length >= 3) {
+      for(int i = 0; i < accel.length; i++) {
+        accel[i] = int(a[i]);           // cast to integer, add to array at position i
+      }
+      drawPlot();
     }
-    drawPlot();
+    else {
+      println("Problem detected! Are you sending all the axes with a comma separating them?");
+      exit();
+    }
   }
   else {
-    println("Could not connect to Esplora! Make sure it is connected to the computer and the correct port is selected!");
+    println("Could not connect to Esplora! Make sure it is connected to the computer,  and the correct port is selected!");
     exit();
   }
 }
@@ -91,6 +96,20 @@ void drawBorders() {
   line(box, height/2, width-box, height/2);
   fill(0);                            // make text black
   text("time", width - box - 30, height/2+20);
+  text("1g", offset+5, height/2-125+12);
+  text("2g", offset+5, height/2-250+12);
+  text("-1g", offset+5, height/2+125+12);
+  text("-2g", offset+5, height/2+250+12);
+  int x1 = offset;
+  int x2 = width-box;
+  for(int i = 0; i <= 50; i++) {
+    float x = lerp(x1, x2, i/50.0);
+    point(x, height/2+125);
+    point(x, height/2+250);
+    point(x, height/2-125);
+    point(x, height/2-250);
+  }
+  textSize(16);
   if (mode == 0)
     text("X axis", offset+5, box+20);
   else if (mode == 1)
@@ -98,6 +117,7 @@ void drawBorders() {
   else
     text("Z axis", offset+5, box+20);
   strokeWeight(1);
+  textSize(12);
 }
  
 // Reset the plot
@@ -119,5 +139,4 @@ void keyPressed() {
     mode = 2;
     reset();
   }
-
 }
