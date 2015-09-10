@@ -35,8 +35,8 @@ void setup() {
     println("No serial port attached, please plug in your Esplora!");
     exit();
   }
-  String comPort = Serial.list()[0];    // should work on mac/linux
-  //String comPort = Serial.list()[1];    // should work on windows
+  //String comPort = Serial.list()[0];    // should work on mac/linux
+  String comPort = Serial.list()[Serial.list().length-1];    // should work on windows
   port = new Serial(this, comPort, 9600);   // 0 is the first port, you may have to change
   size(800, 600);           // new window
   frame.setTitle("Accelerometer plot");
@@ -48,6 +48,7 @@ void draw() {
     serial = port.readStringUntil('\n');
   }
   if (serial != null) {               // if string is not empty
+    serial = trim(serial);
     String[] a = split(serial, ',');  // split up line with delimiter to be ','
     if(a.length >= 3) {
       for(int i = 0; i < accel.length; i++) {
