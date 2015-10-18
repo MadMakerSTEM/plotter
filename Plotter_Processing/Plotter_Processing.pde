@@ -30,14 +30,17 @@ float[] data = new float[numPoints];
 float[] xAxis = new float[numPoints];
  
 void setup() {
-  println(Serial.list());   // print the serial ports available
-  if(Serial.list().length == 0) {
-    println("No serial port attached, please plug in your Esplora!");
+  printArray(Serial.list());   // print the serial ports available
+  //String comPort = Serial.list()[0];    // should work on linux
+  String comPort = Serial.list()[Serial.list().length-1];    // should work on windows and mac
+  try {
+    port = new Serial(this, comPort, 9600);   // 0 is the first port, you may have to change
+  }
+  catch (Exception e) {
+    println(e);
+    println("Please make sure the Serial Monitor is closed and you have selected the correct port.");
     exit();
   }
-  //String comPort = Serial.list()[0];    // should work on mac/linux
-  String comPort = Serial.list()[Serial.list().length-1];    // should work on windows
-  port = new Serial(this, comPort, 9600);   // 0 is the first port, you may have to change
   size(800, 600);           // new window
   frame.setTitle("Accelerometer plot");
   reset();
@@ -80,7 +83,7 @@ void drawPlot() {
       line(xAxis[i-1], data[i-1], xAxis[i], data[i]);
     }
     currentPoint++;
-  } 
+  }
   else {
     reset();
   }
@@ -97,18 +100,18 @@ void drawBorders() {
   line(box, height/2, width-box, height/2);
   fill(0);                            // make text black
   text("time", width - box - 30, height/2+20);
-  text("1g", offset+5, height/2-125+12);
-  text("2g", offset+5, height/2-250+12);
-  text("-1g", offset+5, height/2+125+12);
-  text("-2g", offset+5, height/2+250+12);
+  text("1g", offset+5, height/2-95+12);
+  text("2g", offset+5, height/2-190+12);
+  text("-1g", offset+5, height/2+95+12);
+  text("-2g", offset+5, height/2+190+12);
   int x1 = offset;
   int x2 = width-box;
   for(int i = 0; i <= 50; i++) {
     float x = lerp(x1, x2, i/50.0);
-    point(x, height/2+125);
-    point(x, height/2+250);
-    point(x, height/2-125);
-    point(x, height/2-250);
+    point(x, height/2+95);
+    point(x, height/2+190);
+    point(x, height/2-95);
+    point(x, height/2-190);
   }
   textSize(16);
   if (mode == 0)
